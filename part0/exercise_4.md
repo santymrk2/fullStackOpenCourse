@@ -1,3 +1,4 @@
+# User creates a new note in PWA
 ```mermaid
 sequenceDiagram
     participant browser
