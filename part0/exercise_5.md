@@ -1,18 +1,11 @@
+# User going into to the page with SPA
+Note that  the graphic at the beginning is similar to the PWA.
 ```mermaid
 sequenceDiagram
     participant browser
     participant server
 
-
-    Note right of browser: The browser send the form
-    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note 
-    activate server
-    server-->>browser: HTML document
-    deactivate server
-
-    Note right of browser: When the note is save in the DB, it calls the html again with a redirection with the http code 302.
-
-    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/spa
     activate server
     server-->>browser: HTML document
     deactivate server
@@ -22,9 +15,9 @@ sequenceDiagram
     server-->>browser: the css file
     deactivate server
 
-    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.js
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/spa.js
     activate server
-    server-->>browser: the JavaScript file
+    server-->>browser: the JavaScript file for SPA
     deactivate server
 
     Note right of browser: The browser starts executing the JavaScript code that fetches the JSON from the server
@@ -35,4 +28,19 @@ sequenceDiagram
     deactivate server
 
     Note right of browser: The browser executes the callback function that renders the new list of notes
+```
+
+# User sends a note with SPA
+```mermaid
+sequenceDiagram
+    participant browser
+    participant server
+
+    Note right of browser: The note is added to the local array and it is rendering. Then it will be sending to the server.
+
+    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+    activate server
+    server-->>browser: JSON Response
+    deactivate server
+
 ```
