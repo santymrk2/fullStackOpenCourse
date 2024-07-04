@@ -9,13 +9,33 @@ const Button = ({title, onClick}) => {
   )
 }
 
+const StatisticLine = ({title, value}) => {
+  return(
+    <p>{title} = {value}</p>
+  )
+}
+
 const Statistics = ({good, bad, neutral}) => {
+  const totalSum = good + bad + neutral
+  const average = (good-bad)/totalSum
+  const positive = (good/totalSum)*100
+  if(totalSum == 0) {
+    return(
+      <>
+        <h1>Statistics</h1>
+        <p>No feedback given</p>
+      </>
+    )
+  }
   return(
     <>
       <h1>Statistics</h1>
-      <p>Good - {good}</p>
-      <p>Neutral - {neutral}</p>
-      <p>Bad - {bad}</p>
+      <StatisticLine title="Good" value={good} />
+      <StatisticLine title="Neutral" value={neutral} />
+      <StatisticLine title="Bad" value={bad} />
+      <StatisticLine title="All Opinions" value={totalSum} />
+      <StatisticLine title="Average" value={average} />
+      <StatisticLine title="Positive" value={positive} />
     </>
   )
 }
@@ -28,19 +48,16 @@ function App() {
   const handleClickGood = () => {
     const result = good + 1
     setGood(result)
-    console.log("The good recording is", good)
   }
 
   const handleClickNeutral = () => {
     const result = neutral + 1
     setNeutral(result)
-    console.log("The neutral recording is", neutral)
   }
 
   const handleClickBad = () => {
     const result = bad + 1
     setBad(result)
-    console.log("The bad recording is", bad)
   }
 
   return (
