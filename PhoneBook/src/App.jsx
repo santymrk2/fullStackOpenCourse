@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import ContactList from './components/ContactList'
 import PersonForm from './components/PersonForm'
-import axios from 'axios'
+import personService from './services/notes'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -22,10 +22,19 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
+  const handleDelete = (person) => {
+    if(confirm(`Delete ${person.name}?`)) {
+      personService.deletePerson(person.id)
+    }
+  }
+
   const addPerson = (event) => {
     event.preventDefault()
     console.log("Enviado", event);
-    const nextId = persons.length + 1
+    let nextId = persons.length + 1
+    if(persons.filter(person => person.id === nextId)) {
+      nextId = nextId + 1 
+    }
     const newOne = {
       id: String(nextId),
       name: newName,
@@ -34,12 +43,19 @@ const App = () => {
     console.log(newOne);
     if(newOne) {
       let actual
-      persons.map((person) => (person.name === newOne.name ? actual = true : actual = false)) 
+      persons.map((person) => (person.name === newOne.name ? actual = person.id : actual = false)) 
 
+      console.log(actual)
+      
       if(actual){
-        alert(`${newOne.name} is already in the list`)
+        if(confirm(`${newOne.name} is already added to phonebook, replace the old number with a new one?`)){
+          personService.update(actual, newOne)
+        }
       } else {
-        setPersons(persons.concat(newOne))
+        personService.create(newOne)
+        .then(response => {
+          setPersons(persons.concat(response))
+        })
       }
       setNewName('')
       setNewNumber('')
@@ -51,12 +67,11 @@ const App = () => {
     : persons.filter((person) => person.name.toLowerCase().includes(filterName.toLowerCase()))
 
   useEffect(()=>{
-    axios
-      .get('http://localhost:3001/persons')
+    personService.getAll()
       .then(response => {
-        setPersons(response.data)
+        setPersons(response)
       })
-  }, [])
+  }, [handleDelete])
 
   return (
     <div>
@@ -71,7 +86,7 @@ const App = () => {
         
       />
       <h2>Numbers</h2>
-      <ContactList persons={personsToShow} />
+      <ContactList persons={personsToShow} handleDelete={handleDelete} />
     </div>
   )
 }
