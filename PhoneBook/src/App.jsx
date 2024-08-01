@@ -13,7 +13,6 @@ const App = () => {
   const [filterName, setFilterName] = useState('')
   const [message, setMessage] = useState(null)
   const [error, setError] = useState(null)
-  const [update, setUpdate] = useState(null)
 
   const handleFilter = (event) => {
     setFilterName(event.target.value)
@@ -30,8 +29,7 @@ const App = () => {
   const handleDelete = (person) => {
     if(confirm(`Delete ${person.name}?`)) {
       personService.deletePerson(person.id).then(()=>{
-        const temp = update
-        setUpdate(!temp)
+        setPersons(persons.filter(p => p.id != person.id))
       }
       )
       .catch(error => {
@@ -44,9 +42,24 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
     console.log("Enviado", event);
-    let nextId 
+    let nextId
+    let status = true
     nextId = persons.length + 1
-    persons.map(person => person.id === nextId & nextId++ )
+    while(status){
+      const cantidad = persons.filter(person => person.id == nextId)
+      console.log('cantidad es', cantidad);
+      
+      if(cantidad.length == 0){
+        status = false
+        console.log('entro al if de cantidad = 0');
+
+      } else {
+        console.log('entro al if de cantidad distinto');
+        
+        nextId++
+      }
+    }
+    
 
 
 
@@ -90,7 +103,7 @@ const App = () => {
     })
   }
 
-  useEffect(getAllPersons, [update])
+  useEffect(getAllPersons, [])
 
   return (
     <div>
