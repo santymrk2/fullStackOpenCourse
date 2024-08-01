@@ -1,29 +1,9 @@
 {
   "persons": [
     {
-      "id": "1",
-      "name": "Santymc",
-      "number": "12333"
-    },
-    {
       "id": "3",
-      "name": "santymc",
-      "number": "234"
-    },
-    {
-      "id": "4",
-      "name": "sann",
-      "number": "23456"
-    },
-    {
-      "id": "5",
-      "name": "santymcss",
-      "number": "234555"
-    },
-    {
-      "id": "6",
-      "name": "saa",
-      "number": "223333"
+      "name": "aaaaa",
+      "number": "2"
     }
   ]
 }
